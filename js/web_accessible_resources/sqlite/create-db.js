@@ -6,14 +6,14 @@ var db;
 var dataset;
 
 function initDatabase() {
-    console.debug('called initDatabase()');
+    console.log('called initDatabase()');
 
     try {
         if (!window.openDatabase)
             alert('not supported');
         else
             db = openDatabase('WppWebApi', '1.0', 'DB to Whatsapp Web Api', 65536);
-    } catch(e) {
+    } catch (e) {
         if (e == 2)
             alert('Invalid database version');
         else

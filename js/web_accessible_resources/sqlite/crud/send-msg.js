@@ -3,7 +3,7 @@
  */
 
 function getSendMessages(callback) {
-    console.debug('called showRecords()');
+    console.log('called showRecords()');
 
     var sql = "SELECT * FROM send_msg";
 
@@ -15,7 +15,7 @@ function getSendMessages(callback) {
 }
 
 function getDeleteSendMessage(id) {
-    console.debug('called showRecords()');
+    console.log('called showRecords()');
 
     var sql = "DELETE FROM send_msg WHERE id=?";
 

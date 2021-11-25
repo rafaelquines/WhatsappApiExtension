@@ -3,14 +3,14 @@
  */
 
 function insertMessage(json) {
-    console.debug('called insertRecord()');
+    console.log('called insertRecord()');
 
     var sql = 'INSERT INTO messages (json) VALUES (?)';
 
     db.transaction(
         function (transaction) {
             transaction.executeSql(sql, [json]);
-            console.debug('executeSql: ' + sql);
+            console.log('executeSql: ' + sql);
         }
     );
 }

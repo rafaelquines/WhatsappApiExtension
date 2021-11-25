@@ -6,16 +6,12 @@ var contact;
 var last_msg = [];
 var msg_output = [];
 
-function getMessagesFormatted(chat)
-{
+function getMessagesFormatted(chat) {
     messages = chat.msgs.models;
     contact = getInformationByContact(chat);
-    for (let i = messages.length - 1; i >= 0; i--)
-    {
-        if (!messages[i].id.fromMe)
-        {
-            if (isLastMsg(messages[i]))
-            {
+    for (let i = messages.length - 1; i >= 0; i--) {
+        if (!messages[i].id.fromMe) {
+            if (isLastMsg(messages[i])) {
                 continue;
             }
             msg_output.push(joinObjs(contact, getInformationByMessage(messages[i])));
@@ -23,30 +19,24 @@ function getMessagesFormatted(chat)
     }
 }
 
-function isLastMsg(messages)
-{
+function isLastMsg(messages) {
     return ((messages.id.id == last_msg['id']) || (parseInt(messages.t) < parseInt(last_msg['timestamp'])));
 }
 
-function getLastMsgByResults(results)
-{
+function getLastMsgByResults(results) {
     last_msg['id'] = ((results.rows.length > 0) ? results.rows[0].id_msg : 0);
     last_msg['timestamp'] = ((results.rows.length > 0) ? results.rows[0].timestamp : 0);
 }
 
-function getLastMsgAndSave()
-{
-    if (msg_output.length > 0)
-    {
+function getLastMsgAndSave() {
+    if (msg_output.length > 0) {
         saveLastMsg(msg_output[0].id, msg_output[0].timestamp, loop);
-    } else
-    {
+    } else {
         setTimeout(loop, 1000);
     }
 }
 
-function getInformationByContact(chat)
-{
+function getInformationByContact(chat) {
     return {
         formattedTitle: chat.formattedTitle,
         name: chat.name,
@@ -54,8 +44,7 @@ function getInformationByContact(chat)
     }
 }
 
-function getInformationByMessage(message)
-{
+function getInformationByMessage(message) {
     return {
         id: message.id.id,
         message: message.body,
@@ -74,31 +63,25 @@ function getInformationByMessage(message)
  * @param obj1
  * @param obj2
  */
-function joinObjs(obj1, obj2)
-{
+function joinObjs(obj1, obj2) {
     return $.extend({}, obj1, obj2);
 }
 
-function receiveMessages(transaction, results)
-{
+function receiveMessages(transaction, results) {
     msg_output = [];
-    Store.Chat.models.forEach(function (chat)
-    {
+    Store.Chat.models.forEach(function (chat) {
         getLastMsgByResults(results);
         getMessagesFormatted(chat);
     });
 
-    msg_output.forEach(function (msg)
-    {
+    msg_output.forEach(function (msg) {
         insertMessage(JSON.stringify(msg));
         console.log(msg);
     });
 }
 
-var sendMessages = function (transaction, results)
-{
-    $.each(results.rows, function (i, val)
-    {
+var sendMessages = function (transaction, results) {
+    $.each(results.rows, function (i, val) {
         var row = results.rows.item[i];
         console.log('Enviando mensagem para o contato:' + val.contact + '    message:' + val.message);
         sendMsg(val.contact, val.message);
@@ -106,14 +89,13 @@ var sendMessages = function (transaction, results)
     });
 };
 
-var messageManager = function (transaction, results)
-{
+var messageManager = function (transaction, results) {
+    console.log(' messageManager');
     getSendMessages(sendMessages);
     receiveMessages(transaction, results);
     getLastMsgAndSave();
 };
 
-function getMessages()
-{
+function getMessages() {
     getLastMsg(messageManager);
 }

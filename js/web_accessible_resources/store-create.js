@@ -1,4 +1,5 @@
 function createStore() {
+    console.log('create store');
     if (!window.Store) {
         (function () {
             function getStore(modules) {
@@ -80,10 +81,10 @@ function createStore() {
 
 console.log("Store Create");
 console.log("Waiting...");
-setTimeout(function(){
+setTimeout(function () {
     console.log("Created");
-    createStore();
-    console.log(Store);
+    //createStore();
+    //console.log(Store);
     console.log("Start loop")
     loop();
 }, 7000);
